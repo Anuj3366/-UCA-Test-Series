@@ -1,68 +1,70 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
+#include <stdlib.h>
 
-struct Stack
-{
-  int data;
-  struct Stack *next;
-} *top = NULL, *tail = NULL;
+struct Stack{
+  char data;
+  struct Stack *prev;
+}*tail = NULL;
 
-void insert(int input)
-{
-  struct Stack *temp;
+void insert(char input){
+  struct Stack *temp = (struct Stack*) malloc(sizeof(struct Stack));
   temp->data = input;
-  temp->next = NULL;
-  if (top == NULL)
+  temp->prev = NULL;
+  if (tail == NULL)
   {
-    top = temp;
     tail = temp;
   }
   else
   {
-    tail->next = temp;
+    temp->prev = tail;
     tail = temp;
   }
 }
-int onTop()
-{
-  return top->data;
-}
-void remove()
-{
-  struct Stack *temp = top;
+
+void removeTop(){
+  struct Stack *temp = tail;
+  tail = tail->prev;
   free(temp);
-  top = top->next;
+}
+
+void freeAll(){
+    struct Stack *temp = tail;
+    while(tail != NULL){
+        tail = tail->prev;
+        free(temp);
+        temp = tail;
+    }
+}
+
+char onTop(){
+  if(tail == NULL) return ')'; 
+  return tail->data;
 }
 
 bool isValid(char *s)
 {
-  while(s != NULL)
-  {
-    if(s == '(' || s == '{' || s == '[')
-    {
-      insert(s);
+    while(*s != '\0'){
+        if(*s == '(' || *s == '{' || *s == '[' ){
+            insert(*s);
+        }
+        else if(*s == ')' && onTop() == '('){
+            removeTop();
+        }
+        else if(*s == ']' && onTop() == '['){
+            removeTop();
+        }
+        else if(*s == '}' && onTop() == '{'){
+            removeTop();
+        }
+        else{
+            freeAll();
+            return false;
+        }
+        s++;
     }
-    else if(s == ')' || s == '}' || s == ']')
-    {
-      if(onTop() == '(' && s == ')')
-      {
-        remove();
-      }
-      else if(onTop() == '{' && s == '}')
-      {
-        remove();
-      }
-      else if(onTop() == '[' && s == ']')
-      {
-        remove();
-      }
-      else
-      {
+    if(tail != NULL){
+        freeAll();
         return false;
-      }
     }
-    s++;
-  }
+    return true;
 }
