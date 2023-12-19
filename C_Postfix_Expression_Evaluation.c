@@ -3,88 +3,63 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-struct Stack
+typedef struct
 {
-  struct Stack *next;
-  int data;
-} *top = NULL;
+  void** arr;
+  int size;
+  int cap;
+}Stack;
 
-void push(int input)
-{
-  struct Stack *temp = (struct Stack *)malloc(sizeof(struct Stack));
-  temp->data = input;
-  temp->next = top;
-  top = temp;
+Stack* createStack(int capacity){
+  Stack *stack = (Stack*)malloc(sizeof(Stack));
+  *stack->arr = (void**)malloc(capacity * sizeof(void**));
+  stack->cap = capacity;
+  stack->size = -1;
+  return stack;
 }
 
-int peek()
-{
-  return top->data;
+bool isFull(Stack* stack){
+  return (stack->size == stack->cap);
 }
 
-bool isEmpty()
-{
-  return (top == NULL);
+bool isEmpty(Stack* stack){
+  return (stack->size == -1);
 }
 
-void pop()
-{
-  if (!isEmpty())
-  {
-    struct Stack *temp = top;
-    top = top->next;
-    free(temp);
+void push(Stack* stack,void** data){
+  if(isFull(stack)){
+    printf("ERROR : Stack Overflow");
+  }
+  else{
+    stack->arr[++stack->size] = *data;
   }
 }
 
-bool isOperator(char input)
-{
-  if (input == '+' || input == '-' || input == '*' || input == '/' || input == '^')
-    return true;
-  return false;
+void pop(Stack* stack){
+  if(isEmpty(stack)){
+    printf("ERROR : Stack is Empty");
+  }
+  else{
+    stack->size = stack->size-1;
+  }
 }
 
-int main()
-{
-  int n;
-  scanf("%d", &n);
-  for (int i = 0; i < n; i++)
-  {
-    char *input = (char *)malloc(100 * sizeof(char));
-    scanf("%s", input);
-    while (*input != '?')
-    {
-      if (isOperator(*input))
-      {
-        int op1 = peek();
-        pop();
-        int op2 = peek();
-        pop();
-        if (*input == '+')
-          push(op1 + op2);
-        else if (*input == '-')
-          push(op1 - op2);
-        else if (*input == '/')
-          push(op1 / op2);
-        else
-          push(op1 * op2);
-      }
-      else if (!isOperator(*input) && *input != ' ')
-      {
-        int num = 0;
-        while (*input >= '0' && *input <= '9')
-        {
-          num *= 10;
-          num += (*input - '0');
-          input++;
-        }
-        push(num);
-        printf("%d\n", num);
-      }
-      input++;
-    }
-    printf("%d\n", peek());
-    pop();
+void** peek(Stack* stack){
+  if(isEmpty(stack)){
+    printf("ERROR : Stack is Empty");
   }
-  return 0;
+  else{
+    int s = stack->size -1;
+    return stack->arr[s];
+  }
+}
+
+int main(){
+  Stack* stack = createStack(5);
+  int x = 20;
+  int * a = &x;
+  void** b= (void**)&a;
+  push(stack,b);
+  printf("%d",*(int*)peek(stack));
+
 }
