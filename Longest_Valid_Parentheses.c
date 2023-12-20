@@ -3,93 +3,97 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef struct{
-  struct Node* next;
-  void* data;
-}Node;
+typedef struct
+{
+  struct Node *next;
+  int index;
+} Node;
 
 typedef struct
 {
-  Node* head;
+  Node *head;
   int size;
-}Stack;
+} Stack;
 
-
-Stack* createStack(){
-  Stack *stack = (Stack*)malloc(sizeof(Stack));
+Stack *createStack()
+{
+  Stack *stack = (Stack *)malloc(sizeof(Stack));
   stack->head = NULL;
   stack->size = -1;
   return stack;
 }
 
-bool isEmpty(Stack* stack){
-  return (stack->size==-1);
+bool isEmpty(Stack *stack)
+{
+  return (stack->size == -1);
 }
 
-void push(Stack* stack, void* data){
-  stack->size = stack->size+1;
-  Node* node = (Node*)malloc(sizeof(Node));
-  node->data = data;
+void push(Stack *stack, int index)
+{
+  stack->size = stack->size + 1;
+  Node *node = (Node *)malloc(sizeof(Node));
+  node->index = index;
   node->next = stack->head;
   stack->head = node;
 }
 
-void pop(Stack* stack){
-  if(isEmpty(stack)){
-    printf("ERROR : Stack is Empty");
-  }
-  else{
-    Node* temp = stack->head;
+void pop(Stack *stack)
+{
+  if (!isEmpty(stack))
+  {
+    Node *temp = stack->head;
     stack->head = stack->head->next;
-    stack->size = stack->size-1;
+    stack->size = stack->size - 1;
     free(temp);
   }
 }
 
-void* peek(Stack* stack){
-  if(isEmpty(stack)){
-    return "/";
-  }
-  else{
-    return stack->head->data;
-  }
-}
-
-
-void freeAll(Stack * stack){
-    while(!isEmpty(stack)){
-      pop(stack);
-    }
-    free(stack);
-}
-
-bool isValid(char *s)
+int peek(Stack *stack)
 {
-    Stack *stack = createStack();
-    while(*s != '\0'){
-        if(*s == '(' || *s == '{' || *s == '[' ){
-            char *temp = malloc(sizeof(char));
-            *temp = *s;
-            push(stack, temp);
-        }
-        else if(*s == ')' && *(char *)peek(stack) == '('){
-            pop(stack);
-        }
-        else if(*s == ']' && *(char *)peek(stack) == '['){
-            pop(stack);
-        }
-        else if(*s == '}' && *(char *)peek(stack) == '{'){
-            pop(stack);
-        }
-        else{
-            freeAll(stack);
-            return false;
-        }
-        s++;
+  if (isEmpty(stack))
+  {
+    return -1;
+  }
+  else
+  {
+    return stack->head->index;
+  }
+}
+
+void freeAll(Stack *stack)
+{
+  while (!isEmpty(stack))
+  {
+    pop(stack);
+  }
+  free(stack);
+}
+
+int longestValidParentheses(char *s)
+{
+  int max = 0;
+  Stack *stack = createStack();
+  push(stack, -1);
+  for (int i = 0; s[i] != '\0'; i++)
+  {
+    if (s[i] == '(')
+    {
+      push(stack, i);
     }
-    if(!isEmpty(stack)){
-        freeAll(stack);
-        return false;
+    else
+    {
+      pop(stack);
+      if (isEmpty(stack))
+      {
+        push(stack, i);
+      }
+      else
+      {
+        int length = i - peek(stack);
+        max = length > max ? length : max;
+      }
     }
-    return true;
+  }
+  freeAll(stack);
+  return max;
 }

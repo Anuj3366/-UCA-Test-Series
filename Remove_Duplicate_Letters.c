@@ -2,24 +2,25 @@
 #include <string.h>
 
 char *removeDuplicateLetters(char *s) {
-    int freq[26] = {0};
+    int count[26] = {0};
+    int visited[26] = {0};
     int len = strlen(s);
-    char *ans = (char*)malloc((len + 1) * sizeof(char));
-    char *start = ans;
+    char *result = (char*)malloc((len + 1) * sizeof(char));
+    int pos = 0;
 
-    while(*s != '\0'){
-        int rep = (*s - 'a');
-        if(freq[rep] == 0){
-            freq[rep]++;
-        }
-        s++;
+    for(int i = 0; i < len; i++) {
+        count[s[i] - 'a']++;
     }
-    for(int i = 0;i<26;i++){
-        if(freq[i] > 0){
-            *ans = (i+'a');
-            ans++;
+
+    for(int i = 0; i < len; i++) {
+        count[s[i] - 'a']--;
+        if(visited[s[i] - 'a']) continue;
+        while(pos > 0 && s[i] < result[pos - 1] && count[result[pos - 1] - 'a'] > 0) {
+            visited[result[--pos] - 'a'] = 0;
         }
+        result[pos++] = s[i];
+        visited[s[i] - 'a'] = 1;
     }
-    *ans = '\0';
-    return start;
+    result[pos] = '\0';
+    return result;
 }

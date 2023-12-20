@@ -88,62 +88,58 @@ int main()
   scanf("%d", &n);
   for (int i = 0; i < n; i++)
   {
-    char *input = (char *)malloc(100 * sizeof(char));
+    char input[100];
+    int j = 0;
     Stack *stack = createStack();
-    scanf("%s", input);
-    while (*input != '?' && *input != '\0')
+    scanf("%s",input);
+    while (input[j] != '?')
     {
-      if (isSymbol(*input) && stack->size >= 1)
+      if (isSymbol(input[j]) && stack->size >= 1)
       {
         int op1 = *(int *)peek(stack);
         pop(stack);
         int op2 = *(int *)peek(stack);
         pop(stack);
-        void *sumToPush = malloc(sizeof(int));
-        if (*input == '+')
+        int *sumToPush = (int *)malloc(sizeof(int));
+        if (input[j] == '+')
         {
-          int sum = op1 + op2;
-          sumToPush = (void *)&sum;
+          *sumToPush = op1 + op2;
           push(stack, sumToPush);
         }
-        else if (*input == '-')
+        else if (input[j] == '-')
         {
-          int sum = op1 - op2;
-          sumToPush = (void *)&sum;
+          *sumToPush = op1 - op2;
           push(stack, sumToPush);
         }
-        else if (*input == '/')
+        else if (input[j] == '/')
         {
-          int sum = op1 / op2;
-          sumToPush = (void *)&sum;
+          *sumToPush = op1 / op2;
           push(stack, sumToPush);
         }
         else
         {
-          int sum = op1 * op2;
-          sumToPush = (void *)&sum;
+          *sumToPush = op1 * op2;
           push(stack, sumToPush);
         }
       }
-      else if (!isSymbol(*input) && *input != ' ')
+      else if (!isSymbol(input[j]) && input[j] != ' ' && input[j] != '?')
       {
         int num = 0;
-        while (*input != ' ' && *input != '\0')
+        while (j < strlen(input) && input[j] != ' ')
         {
           num *= 10;
-          num += (*input - '0');
-          input++;
+          num += (input[j] - '0');
+          j++;
         }
-        void *numToPush = malloc(sizeof(int));
-        numToPush = (void *)&num;
-        printf("num : %d\n", *(int *)numToPush);
+        int *numToPush = (int *)malloc(sizeof(int));
+        *numToPush = num;
+        printf("num : %d\n", *numToPush);
         push(stack, numToPush);
       }
-      input++;
+      j++;
     }
     printf("%d\n", *(int *)peek(stack));
     freeAll(stack);
-    free(input);
   }
   return 0;
 }
