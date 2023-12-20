@@ -28,7 +28,17 @@ bool isEmpty(Stack *stack)
   return (stack->size == -1);
 }
 
-void *peek(Stack *stack);
+void *peek(Stack *stack)
+{
+  if (isEmpty(stack))
+  {
+    return "/";
+  }
+  else
+  {
+    return stack->head->data;
+  }
+}
 
 void push(Stack *stack, void *data)
 {
@@ -52,20 +62,7 @@ void pop(Stack *stack)
     stack->head = stack->head->next;
     stack->size = stack->size - 1;
     printf("pop : %d,\n", *(int *)peek(stack));
-    free(temp->data);
     free(temp);
-  }
-}
-
-void *peek(Stack *stack)
-{
-  if (isEmpty(stack))
-  {
-    return NULL;
-  }
-  else
-  {
-    return stack->head->data;
   }
 }
 
@@ -94,50 +91,59 @@ int main()
     char *input = (char *)malloc(100 * sizeof(char));
     Stack *stack = createStack();
     scanf("%s", input);
-    char *token = strtok(input, " ");
-    while (token != NULL)
+    while (*input != '?' && *input != '\0')
     {
-      if (isSymbol(*token) && stack->size >= 1)
+      if (isSymbol(*input) && stack->size >= 1)
       {
-        int op2 = *(int *)peek(stack); // Second operand
+        int op1 = *(int *)peek(stack);
         pop(stack);
-        int op1 = *(int *)peek(stack); // First operand
+        int op2 = *(int *)peek(stack);
         pop(stack);
-        int *sumToPush = malloc(sizeof(int));
-        if (*token == '+')
+        void *sumToPush = malloc(sizeof(int));
+        if (*input == '+')
         {
-          *sumToPush = op1 + op2;
+          int sum = op1 + op2;
+          sumToPush = (void *)&sum;
           push(stack, sumToPush);
         }
-        else if (*token == '-')
+        else if (*input == '-')
         {
-          *sumToPush = op1 - op2;
+          int sum = op1 - op2;
+          sumToPush = (void *)&sum;
           push(stack, sumToPush);
         }
-        else if (*token == '/')
+        else if (*input == '/')
         {
-          *sumToPush = op1 / op2;
+          int sum = op1 / op2;
+          sumToPush = (void *)&sum;
           push(stack, sumToPush);
         }
         else
         {
-          *sumToPush = op1 * op2;
+          int sum = op1 * op2;
+          sumToPush = (void *)&sum;
           push(stack, sumToPush);
         }
       }
-      else if (!isSymbol(*token) && *token != ' ')
+      else if (!isSymbol(*input) && *input != ' ')
       {
-        int num = atoi(token);
-        int *numToPush = malloc(sizeof(int));
-        *numToPush = num;
+        int num = 0;
+        while (*input != ' ' && *input != '\0')
+        {
+          num *= 10;
+          num += (*input - '0');
+          input++;
+        }
+        void *numToPush = malloc(sizeof(int));
+        numToPush = (void *)&num;
+        printf("num : %d\n", *(int *)numToPush);
         push(stack, numToPush);
       }
-      token = strtok(NULL, " ");
+      input++;
     }
-    printf("ans : %d\n", *(int *)peek(stack));
+    printf("%d\n", *(int *)peek(stack));
     freeAll(stack);
     free(input);
   }
   return 0;
 }
-
