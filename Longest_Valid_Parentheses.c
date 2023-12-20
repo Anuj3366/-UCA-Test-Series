@@ -1,53 +1,95 @@
-#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-struct Stack
-{
-  char data;
-  struct Stack *prev;
-} *tail = NULL;
+typedef struct{
+  struct Node* next;
+  void* data;
+}Node;
 
-void insert(char input)
+typedef struct
 {
-  struct Stack *temp = (struct Stack *)malloc(sizeof(struct Stack));
-  temp->data = input;
-  temp->prev = NULL;
-  if (tail == NULL)
-  {
-    tail = temp;
-  }
-  else
-  {
-    temp->prev = tail;
-    tail = temp;
-  }
+  Node* head;
+  int size;
+}Stack;
+
+
+Stack* createStack(){
+  Stack *stack = (Stack*)malloc(sizeof(Stack));
+  stack->head = NULL;
+  stack->size = -1;
+  return stack;
 }
 
-void removeTop()
-{
-  struct Stack *temp = tail;
-  tail = tail->prev;
-  free(temp);
+bool isEmpty(Stack* stack){
+  return (stack->size==-1);
 }
 
-void freeAll()
-{
-  struct Stack *temp = tail;
-  while (tail != NULL)
-  {
-    tail = tail->prev;
+void push(Stack* stack, void* data){
+  stack->size = stack->size+1;
+  Node* node = (Node*)malloc(sizeof(Node));
+  node->data = data;
+  node->next = stack->head;
+  stack->head = node;
+}
+
+void pop(Stack* stack){
+  if(isEmpty(stack)){
+    printf("ERROR : Stack is Empty");
+  }
+  else{
+    Node* temp = stack->head;
+    stack->head = stack->head->next;
+    stack->size = stack->size-1;
     free(temp);
-    temp = tail;
   }
 }
 
-char onTop()
-{
-  if (tail == NULL)
-    return ')';
-  return tail->data;
+void* peek(Stack* stack){
+  if(isEmpty(stack)){
+    return "/";
+  }
+  else{
+    return stack->head->data;
+  }
 }
-int longestValidParentheses(char *s)
+
+
+void freeAll(Stack * stack){
+    while(!isEmpty(stack)){
+      pop(stack);
+    }
+    free(stack);
+}
+
+bool isValid(char *s)
 {
-  int max = 0;
+    Stack *stack = createStack();
+    while(*s != '\0'){
+        if(*s == '(' || *s == '{' || *s == '[' ){
+            char *temp = malloc(sizeof(char));
+            *temp = *s;
+            push(stack, temp);
+        }
+        else if(*s == ')' && *(char *)peek(stack) == '('){
+            pop(stack);
+        }
+        else if(*s == ']' && *(char *)peek(stack) == '['){
+            pop(stack);
+        }
+        else if(*s == '}' && *(char *)peek(stack) == '{'){
+            pop(stack);
+        }
+        else{
+            freeAll(stack);
+            return false;
+        }
+        s++;
+    }
+    if(!isEmpty(stack)){
+        freeAll(stack);
+        return false;
+    }
+    return true;
 }

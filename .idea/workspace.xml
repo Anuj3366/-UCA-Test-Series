@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d0ab0305-f268-44bc-8673-79f8fd19186c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/C_Postfix_Expression_Evaluation.c" beforeDir="false" afterPath="$PROJECT_DIR$/C_Postfix_Expression_Evaluation.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/C_Postfix_Expression_Evaluation.exe" beforeDir="false" afterPath="$PROJECT_DIR$/C_Postfix_Expression_Evaluation.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Longest_Valid_Parentheses.c" beforeDir="false" afterPath="$PROJECT_DIR$/Longest_Valid_Parentheses.c" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="2ZlEDaKaVupQrYtAqUfQ8mEOII1" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/OneDrive/Anuj/Code and Notes/Java",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SwiftWorkspaceSettings">
+    <option name="detectedToolchain" value="true" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d0ab0305-f268-44bc-8673-79f8fd19186c" name="Changes" comment="" />
+      <created>1702988152733</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1702988152733</updated>
+      <workItem from="1702988154159" duration="40000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
